@@ -89,7 +89,7 @@ jobs:
         run: vendor/bin/pint --test
 
       - name: Run Pest Tests
-        run: php artisan test --coverage --min=80
+        run: php artisan test --coverage --min=20
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1

@@ -1,0 +1,64 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+.docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+*.md
+docs/
+.github/
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+.npm
+
+# Laravel
+/storage/*.key
+/storage/logs/*
+!/storage/logs/.gitkeep
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
+.env
+.env.backup
+.env.production
+.env.*.php
+.phpunit.result.cache
+
+# Testing
+tests/
+phpunit.xml
+.phpunit.cache
+coverage/
+
+# Build artifacts
+/public/hot
+/public/storage
+/public/build
+/public/css
+/public/js
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+
+# Development
+vendor/
+# Note: composer.lock and package-lock.json needed for Docker build
+# composer.lock
+# package-lock.json

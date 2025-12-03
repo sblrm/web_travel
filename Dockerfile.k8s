@@ -1,0 +1,95 @@
+# Dockerfile khusus untuk Kubernetes Deployment
+# Simplified - no entrypoint script, no config caching at build time
+
+FROM php:8.2-fpm-alpine AS base
+
+# Install system dependencies
+RUN apk add --no-cache \
+    git \
+    curl \
+    libpng-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    icu-dev \
+    oniguruma-dev
+
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) \
+        gd \
+        pdo_mysql \
+        zip \
+        intl \
+        exif \
+        pcntl \
+        bcmath \
+        opcache
+
+# Install Redis extension
+RUN apk add --no-cache --virtual .build-deps autoconf \
+  dpkg-dev dpkg \
+  file \
+  g++ \
+  gcc \
+  libc-dev \
+  make \
+  pkgconf \
+  re2c \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del .build-deps
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Install Node.js for asset building
+RUN apk add --no-cache nodejs npm
+
+WORKDIR /var/www/html
+
+# Copy dependency files
+COPY composer.json composer.lock ./
+
+# Install PHP dependencies (no dev packages for production)
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+
+# Copy package files
+COPY package.json package-lock.json ./
+
+# Install Node dependencies
+RUN npm ci
+
+# Copy application files
+COPY . .
+
+# Generate optimized autoloader
+RUN composer dump-autoload --optimize
+
+# Build frontend assets
+RUN npm run build
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
+
+# Production stage
+FROM base AS production
+
+# Production PHP configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Configure OPcache for production
+RUN echo "opcache.enable=1" >> "$PHP_INI_DIR/conf.d/opcache.ini" \
+    && echo "opcache.memory_consumption=256" >> "$PHP_INI_DIR/conf.d/opcache.ini" \
+    && echo "opcache.max_accelerated_files=20000" >> "$PHP_INI_DIR/conf.d/opcache.ini" \
+    && echo "opcache.validate_timestamps=0" >> "$PHP_INI_DIR/conf.d/opcache.ini"
+
+EXPOSE 9000
+
+# NO ENTRYPOINT - Kubernetes akan handle initialization via initContainer
+CMD ["php-fpm"]

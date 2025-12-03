@@ -1,0 +1,130 @@
+name: Deploy to Laravel Cloud
+
+on:
+  push:
+    branches:
+      - main
+      - production
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Tests & Code Quality Checks
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: culturaltrip_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --optimize-autoloader
+
+      - name: Generate app key
+        run: php artisan key:generate
+
+      - name: Configure database
+        run: |
+          php artisan config:clear
+          php artisan config:cache
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: culturaltrip_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+
+      - name: Run database migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: culturaltrip_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Run Pint (Code Style Check)
+        run: vendor/bin/pint --test
+
+      - name: Run Pest Tests
+        run: php artisan test
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: culturaltrip_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+
+  deploy:
+    name: Deploy to Laravel Cloud
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Build production assets
+        run: npm run build
+
+      - name: Deploy to Laravel Cloud
+        uses: laravel/cloud-action@v1
+        with:
+          api-token: ${{ secrets.LARAVEL_CLOUD_API_TOKEN }}
+          project-id: ${{ secrets.LARAVEL_CLOUD_PROJECT_ID }}
+          environment: ${{ github.ref == 'refs/heads/production' && 'production' || 'staging' }}
+
+      - name: Run post-deployment commands
+        run: |
+          # These commands will run on Laravel Cloud after deployment
+          echo "Deployment completed. Run migrations via Laravel Cloud console if needed."
+
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment to Laravel Cloud successful!"
+          else
+            echo "❌ Deployment to Laravel Cloud failed!"
+          fi

@@ -1,0 +1,135 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - production
+      - develop
+  push:
+    branches:
+      - develop
+
+jobs:
+  tests:
+    name: Run Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ['8.2', '8.3']
+      fail-fast: false
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: culturaltrip_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: xdebug
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Generate app key
+        run: php artisan key:generate
+
+      - name: Configure database
+        run: |
+          php artisan config:clear
+          php artisan config:cache
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: culturaltrip_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+
+      - name: Run database migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: culturaltrip_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Run Pint (Code Style Check)
+        run: vendor/bin/pint --test
+
+      - name: Run Pest Tests
+        run: php artisan test --coverage --min=80
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: culturaltrip_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
+          CACHE_DRIVER: redis
+          SESSION_DRIVER: redis
+
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run Pint
+        run: vendor/bin/pint --test
+
+      - name: Run PHPStan Static Analysis
+        run: vendor/bin/phpstan analyse --memory-limit=2G || true
+
+      - name: Check for security vulnerabilities
+        run: composer audit
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Check NPM security vulnerabilities
+        run: npm audit --audit-level=moderate

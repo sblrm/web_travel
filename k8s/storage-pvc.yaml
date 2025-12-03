@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: culturaltrip-storage
+  namespace: culturaltrip
+spec:
+  accessModes:
+    - ReadWriteMany  # Required for multiple pods
+  resources:
+    requests:
+      storage: 5Gi
+  # For cloud providers, specify storage class:
+  # storageClassName: standard  # GKE
+  # storageClassName: gp2        # AWS EKS
+  # storageClassName: managed-premium  # Azure AKS

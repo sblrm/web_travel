@@ -1,0 +1,121 @@
+{
+  "project_name": "CulturalTrip",
+  "framework": "Laravel 12 (Fullstack Monolithic Application)",
+  "language": "PHP 8.2+",
+  "database": "MariaDB",
+  "frontend_engine": "Blade Template + TailwindCSS + Alpine.js",
+  "admin_panel": "Filament v3",
+  "description": "CulturalTrip adalah aplikasi web interaktif berbasis Laravel yang menampilkan destinasi wisata budaya Indonesia. Aplikasi ini memiliki sistem peta, asisten perjalanan berbasis AI, serta dashboard admin dengan fitur lengkap untuk pengelolaan data budaya, rute, dan rekomendasi perjalanan.",
+  "main_features": {
+    "🏛️ Comprehensive Cultural Database": {
+      "description": "Sumber informasi budaya Indonesia yang terintegrasi dan terkelola melalui admin panel.",
+      "modules": [
+        "Lebih dari 100 situs budaya seperti Borobudur, Prambanan, Tana Toraja",
+        "Data destinasi mencakup: nama, deskripsi, harga tiket, jam operasional, rating, gambar, dan lokasi (provinsi & kota)",
+        "Upload gambar melalui Filament File Upload",
+        "Filter dan pencarian berdasarkan provinsi, tipe budaya, dan nama destinasi"
+      ]
+    },
+    "🗺️ Interactive Mapping System": {
+      "description": "Visualisasi peta dan navigasi berbasis lokasi untuk pengguna.",
+      "modules": [
+        "Integrasi OpenStreetMap untuk tampilan peta",
+        "Tracking lokasi real-time dengan browser GPS (geolocation API)",
+        "Hitung jarak dan estimasi waktu tempuh antar lokasi wisata",
+        "Visualisasi rute perjalanan dengan leaflet.js"
+      ]
+    },
+    "🤖 AI-Powered Trip Assistant": {
+      "description": "Asisten cerdas untuk membantu pengguna merencanakan perjalanan.",
+      "modules": [
+        "Integrasi Gemini AI atau GPT API untuk chat interaktif",
+        "Saran destinasi berdasarkan preferensi pengguna dan lokasi",
+        "Auto itinerary generator (1-5 hari perjalanan)",
+        "Optimasi waktu dan anggaran secara otomatis"
+      ]
+    },
+    "💰 Transparent Pricing System": {
+      "description": "Tampilan harga, jam buka, dan estimasi biaya secara transparan.",
+      "modules": [
+        "Harga tiket dalam rentang Rp 25.000 - Rp 50.000",
+        "Jam operasional umum: 06:00 - 17:00",
+        "Kalkulasi biaya perjalanan per destinasi",
+        "Opsi hemat untuk backpacker atau traveler keluarga"
+      ]
+    },
+    "🛡️ Admin Dashboard (Filament)": {
+      "description": "Panel admin berbasis Filament untuk manajemen penuh data wisata.",
+      "modules": [
+        "CRUD lengkap untuk destinasi, kategori, provinsi, dan gambar",
+        "Real-time search dan filter dinamis",
+        "Pagination (5-100 item per halaman)",
+        "Role-based Access Control (admin, editor, user)",
+        "Statistik destinasi, review, dan booking pada dashboard utama",
+        "Validasi form dengan Laravel FormRequest dan Zod schema di frontend",
+        "Integrasi database MySQL/MariaDB"
+      ]
+    },
+    "🌐 Modern User Experience": {
+      "description": "Desain responsif dan ringan dengan Blade + TailwindCSS.",
+      "modules": [
+        "Layout dinamis dengan komponen Blade",
+        "Optimasi performa dan caching gambar",
+        "Dark mode opsional untuk pengguna",
+        "UI sederhana dan intuitif seperti aplikasi travel modern"
+      ]
+    }
+  },
+  "authentication": {
+    "system": "Laravel Breeze or Jetstream",
+    "roles": ["Admin", "User"],
+    "features": [
+      "Login dan Register dengan validasi keamanan",
+      "Forgot Password, Reset Password, dan Email Verification",
+      "RLS Policy: user hanya bisa mengakses data trip miliknya"
+    ]
+  },
+  "ai_integration": {
+    "provider": "Gemini AI",
+    "functions": [
+      "Rekomendasi perjalanan",
+      "Chat bantuan wisata",
+      "Optimasi anggaran dan rute"
+    ]
+  },
+  "deployment": {
+    "frontend_backend": "Monolithic Laravel Application",
+    "hosting": ["AWS Elastic Beanstalk", "Vercel (via PHP adapter)"],
+    "env": {
+      "database_url": "mysql://username:password@host:port/db_name",
+      "ai_api_key": "AI_API_KEY"
+    }
+  },
+  "expected_output": {
+    "deliverables": [
+      "Source code Laravel lengkap dengan struktur MVC",
+      "Filament admin dashboard siap pakai",
+      "Halaman Blade untuk Home, Destinasi, Detail, Peta, dan Profile",
+      "API endpoint untuk destinasi dan itinerary AI",
+      "Dokumentasi instalasi dan seed data awal"
+    ],
+    "ui_theme": "Clean, modern, warna cerah khas budaya Indonesia"
+  },
+  "seed_data": {
+    "example_destinations": [
+      {
+        "name": "Candi Borobudur",
+        "province": "Jawa Tengah",
+        "type": "Warisan Budaya Dunia",
+        "ticket_price": 50000,
+        "opening_hours": "06:00 - 17:00"
+      },
+      {
+        "name": "Tana Toraja",
+        "province": "Sulawesi Selatan",
+        "type": "Budaya Tradisional",
+        "ticket_price": 25000,
+        "opening_hours": "07:00 - 18:00"
+      }
+    ]
+  }
+}

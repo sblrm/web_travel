@@ -1,0 +1,140 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+      - production
+  workflow_dispatch:
+
+env:
+  DOCKER_REGISTRY: docker.io
+  DOCKER_IMAGE: ragna13/culturaltrip
+  K8S_NAMESPACE: culturaltrip
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=sha,prefix={{branch}}-
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          target: production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache
+          cache-to: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache,mode=max
+
+      - name: Image digest
+        run: echo ${{ steps.meta.outputs.digest }}
+
+  deploy-to-kubernetes:
+    name: Deploy to Kubernetes
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+
+      - name: Configure kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Verify cluster connection
+        run: kubectl cluster-info
+
+      - name: Create namespace if not exists
+        run: kubectl create namespace ${{ env.K8S_NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Apply ConfigMap
+        run: kubectl apply -f k8s/configmap.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Apply Secrets
+        run: |
+          # Create secrets from GitHub Secrets
+          kubectl create secret generic culturaltrip-secrets \
+            --from-literal=app-key="${{ secrets.APP_KEY }}" \
+            --from-literal=db-password="${{ secrets.DB_PASSWORD }}" \
+            --dry-run=client -o yaml | kubectl apply -f - -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Deploy MySQL StatefulSet
+        run: kubectl apply -f k8s/mysql-statefulset.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Deploy Redis
+        run: kubectl apply -f k8s/redis-deployment.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Wait for MySQL ready
+        run: kubectl wait --for=condition=ready pod -l app=mysql -n ${{ env.K8S_NAMESPACE }} --timeout=300s
+
+      - name: Deploy Application
+        run: kubectl apply -f k8s/app-deployment.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Deploy Queue Workers
+        run: kubectl apply -f k8s/queue-deployment.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Deploy HPA
+        run: kubectl apply -f k8s/hpa.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Wait for app deployment
+        run: kubectl rollout status deployment/culturaltrip-app -n ${{ env.K8S_NAMESPACE }} --timeout=600s
+
+      - name: Run database migrations
+        run: |
+          POD_NAME=$(kubectl get pods -n ${{ env.K8S_NAMESPACE }} -l app=culturaltrip-app -o jsonpath='{.items[0].metadata.name}')
+          kubectl exec $POD_NAME -n ${{ env.K8S_NAMESPACE }} -c app -- php artisan migrate --force
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n ${{ env.K8S_NAMESPACE }}
+          kubectl get svc -n ${{ env.K8S_NAMESPACE }}
+
+  notify:
+    name: Notify Deployment Status
+    needs: [build-and-push, deploy-to-kubernetes]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Send notification
+        run: |
+          if [ "${{ needs.deploy-to-kubernetes.result }}" == "success" ]; then
+            echo "✅ Deployment successful"
+          else
+            echo "❌ Deployment failed"
+          fi

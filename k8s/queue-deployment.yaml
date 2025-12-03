@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: culturaltrip-queue
+  namespace: culturaltrip
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: culturaltrip-queue
+  template:
+    metadata:
+      labels:
+        app: culturaltrip-queue
+    spec:
+      containers:
+        - name: queue-worker
+          image: docker.io/ragna13/culturaltrip:latest
+          command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+          envFrom:
+            - configMapRef:
+                name: culturaltrip-config
+            - secretRef:
+                name: culturaltrip-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          volumeMounts:
+            - name: storage
+              mountPath: /var/www/html/storage
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: culturaltrip-storage

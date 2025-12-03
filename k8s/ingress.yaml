@@ -1,0 +1,41 @@
+# Requires Ingress Controller (nginx-ingress, traefik, etc)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: culturaltrip-ingress
+  namespace: culturaltrip
+  annotations:
+    # Nginx Ingress
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "256m"
+    
+    # Cert-manager for Let's Encrypt
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - culturaltrip.com
+        - www.culturaltrip.com
+      secretName: culturaltrip-tls
+  rules:
+    - host: culturaltrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: culturaltrip-service
+                port:
+                  number: 80
+    - host: www.culturaltrip.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: culturaltrip-service
+                port:
+                  number: 80

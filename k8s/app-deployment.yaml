@@ -1,0 +1,242 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: culturaltrip-app
+  namespace: culturaltrip
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: culturaltrip-app
+  template:
+    metadata:
+      labels:
+        app: culturaltrip-app
+    spec:
+      initContainers:
+        - name: wait-for-mysql
+          image: busybox:latest
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z mysql-service 3306; do
+                echo "Waiting for MySQL..."
+                sleep 2
+              done
+        
+        - name: copy-public
+          image: docker.io/ragna13/culturaltrip:latest
+          imagePullPolicy: Always
+          command: 
+            - sh
+            - -c
+            - |
+              echo "📦 Copying public files..."
+              cp -rL /var/www/html/public/. /public-shared/
+              echo "✅ Files copied, verifying..."
+              ls -lah /public-shared/build/assets/
+              echo "📊 Total files copied:"
+              find /public-shared -type f | wc -l
+          volumeMounts:
+            - name: app-public
+              mountPath: /public-shared
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+        
+        - name: migrate
+          image: docker.io/ragna13/culturaltrip:latest
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "🚀 Clearing cached config..."
+              rm -rf /var/www/html/bootstrap/cache/*
+              
+              echo "📁 Creating Laravel directories..."
+              mkdir -p /var/www/html/storage/framework/{cache,sessions,testing,views}
+              mkdir -p /var/www/html/storage/logs
+              mkdir -p /var/www/html/storage/app/public
+              
+              echo "🔐 Setting permissions..."
+              chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+              chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+              
+              echo "🔗 Linking storage..."
+              /usr/local/bin/php artisan storage:link --force || true
+              
+              echo "🗄️ Running migrations..."
+              /usr/local/bin/php artisan migrate --force
+              
+              echo "✅ Initialization complete!"
+          envFrom:
+            - configMapRef:
+                name: culturaltrip-config
+            - secretRef:
+                name: culturaltrip-secrets
+          volumeMounts:
+            - name: storage
+              mountPath: /var/www/html/storage
+            - name: bootstrap-cache
+              mountPath: /var/www/html/bootstrap/cache
+      containers:
+        - name: app
+          image: docker.io/ragna13/culturaltrip:latest
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - |
+              set -e
+              echo "🚀 Initializing Laravel application..."
+              
+              # Create all required directories
+              mkdir -p /var/www/html/storage/framework/cache/data
+              mkdir -p /var/www/html/storage/framework/sessions
+              mkdir -p /var/www/html/storage/framework/testing
+              mkdir -p /var/www/html/storage/framework/views
+              mkdir -p /var/www/html/storage/logs
+              mkdir -p /var/www/html/storage/app/public
+              mkdir -p /var/www/html/bootstrap/cache
+              
+              # Set ownership and permissions
+              chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+              chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+              
+              # Clear any cached config from Docker build
+              rm -f /var/www/html/bootstrap/cache/config.php
+              rm -f /var/www/html/bootstrap/cache/routes*.php
+              rm -f /var/www/html/bootstrap/cache/events.php
+              rm -f /var/www/html/bootstrap/cache/schedule-*.php
+              
+              echo "✅ Directories created and configured"
+              
+              # Start PHP-FPM
+              echo "🚀 Starting PHP-FPM..."
+              exec php-fpm
+          ports:
+            - containerPort: 9000
+              name: fpm
+          envFrom:
+            - configMapRef:
+                name: culturaltrip-config
+            - secretRef:
+                name: culturaltrip-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          livenessProbe:
+            tcpSocket:
+              port: 9000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 9000
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          volumeMounts:
+            - name: storage
+              mountPath: /var/www/html/storage
+            - name: bootstrap-cache
+              mountPath: /var/www/html/bootstrap/cache
+        - name: nginx
+          image: nginx:alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+            - name: app-public
+              mountPath: /var/www/html/public
+              readOnly: true
+            - name: storage
+              mountPath: /var/www/html/storage
+              readOnly: true
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /up
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /up
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+        - name: storage
+          emptyDir: {}
+        - name: bootstrap-cache
+          emptyDir: {}
+        - name: app-public
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: culturaltrip-service
+  namespace: culturaltrip
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: culturaltrip-app
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: culturaltrip
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name _;
+        root /var/www/html/public;
+        index index.php index.html;
+
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php$ {
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+
+        location ~ /\.ht {
+            deny all;
+        }
+
+        location /storage {
+            alias /var/www/html/storage/app/public;
+        }
+    }

@@ -18,7 +18,6 @@
 - 🐳 [Docker Guide](DOCKER.md) - Complete Docker documentation
 - 🚀 [Deployment Guide](DEPLOYMENT.md) - Laravel Cloud deployment
 - 🔐 [GitHub Secrets Setup](.github/GITHUB_SECRETS.md) - CI/CD configuration
-- 🤖 [AI Coding Guide](.github/copilot-instructions.md) - For AI assistants
 
 ## 🎯 Features
 

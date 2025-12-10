@@ -815,10 +815,11 @@
 <script>
     // Wait for DOM and Leaflet to be ready
     window.addEventListener('load', function() {
-        const lat = {{ $destination->latitude ?? -6.2088 }};
-        const lng = {{ $destination->longitude ?? 106.8456 }};
+        const lat = parseFloat({{ $destination->latitude ?? -6.2088 }});
+        const lng = parseFloat({{ $destination->longitude ?? 106.8456 }});
         
-        console.log('Initializing map with coordinates:', lat, lng);
+        console.log('🗺️ Initializing map with coordinates:', { lat, lng });
+        console.log('Destination:', '{{ $destination->name }}');
         
         const mapElement = document.getElementById('map');
         
@@ -851,15 +852,33 @@
             });
             
             // Add multiple tile layer options with error handling
+            let tileLoadSuccess = false;
+            
+            // Primary tile layer: OpenStreetMap
             const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 19,
-                minZoom: 5,
+                minZoom: 3,
                 errorTileUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
             });
             
+            tileLayer.on('tileload', function() {
+                if (!tileLoadSuccess) {
+                    tileLoadSuccess = true;
+                    console.log('✅ Map tiles loaded successfully');
+                }
+            });
+            
             tileLayer.on('tileerror', function(error) {
-                console.warn('Tile loading error:', error);
+                console.warn('⚠️ Tile loading error, using fallback...', error);
+                // Try alternative tile provider
+                setTimeout(() => {
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+                        maxZoom: 19,
+                        minZoom: 3
+                    }).addTo(map);
+                }, 1000);
             });
             
             tileLayer.addTo(map);

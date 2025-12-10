@@ -1,101 +1,101 @@
 No,Destination Name,City/Regency,Province,Cultural Type,Latitude,Longitude,Opening Hours,Closing Hours,Est. Visit Duration (minutes)
-1,Maimun Palace,Medan,North Sumatra,Warisan Kerajaan & Kolonial,3.5753,986.839,8:00,17:00,45
-2,Muaro Jambi Temple Complex,Muaro Jambi,Jambi,Situs Sejarah & Arkeologi,-14.840,1.036.170,8:00,17:00,90
-3,Rumah Gadang Village,Tanah Datar,West Sumatra,Desa Adat & Kehidupan Tradisional,-4.700,1.006.200,8:00,17:00,60
-4,Weh Island Cultural Village,Sabang,Aceh,Desa Adat & Kehidupan Tradisional,5.8897,953.214,8:00,17:00,120
-5,Balige Traditional Market,Toba,North Sumatra,"Seni, Kerajinan & Pasar",2.3360,990.790,7:00,17:00,60
-6,Borobudur Temple,Magelang,Central Java,Situs Sejarah & Arkeologi,-76.079,1.102.038,6:00,17:00,90
-7,Prambanan Temple,Sleman,DI Yogyakarta,Situs Sejarah & Arkeologi,-77.522,1.104.917,6:00,17:00,90
-8,Keraton Yogyakarta,Yogyakarta,DI Yogyakarta,Warisan Kerajaan & Kolonial,-78.056,1.103.647,8:30,14:00,60
-9,Trusmi Batik Village,Cirebon,West Java,"Seni, Kerajinan & Pasar",-67.333,1.085.667,8:00,17:00,60
-10,Naga Traditional Village,Tasikmalaya,West Java,Desa Adat & Kehidupan Tradisional,-73.510,1.079.560,8:00,17:00,60
-11,Banjar Traditional Village,South Kalimantan,South Kalimantan,Desa Adat & Kehidupan Tradisional,-33.167,1.145.900,8:00,17:00,60
-12,Dayak Longhouse,Kapuas Hulu,West Kalimantan,Desa Adat & Kehidupan Tradisional,-8.333,1.129.333,8:00,17:00,90
-13,Tanjung Puting Cultural Area,Kotawaringin Barat,Central Kalimantan,Desa Adat & Kehidupan Tradisional,-27.333,1.116.333,8:00,17:00,180
-14,Balanga Museum,Palangka Raya,Central Kalimantan,Museum & Monumen,-22.100,1.139.200,8:00,16:00,60
-15,Sintang Cultural Center,Sintang,West Kalimantan,Festival & Taman Budaya,667,1.115.000,8:00,17:00,60
-16,Tana Toraja,Tana Toraja,South Sulawesi,Desa Adat & Kehidupan Tradisional,-30.000,1.200.000,8:00,17:00,180
-17,Fort Rotterdam,Makassar,South Sulawesi,Warisan Kerajaan & Kolonial,-51.331,1.194.064,8:00,17:00,60
-18,Wakatobi Cultural Village,Wakatobi,Southeast Sulawesi,Desa Adat & Kehidupan Tradisional,-53.167,1.235.833,8:00,17:00,120
-19,Gorontalo Traditional House,Gorontalo,Gorontalo,Desa Adat & Kehidupan Tradisional,5.333,1.230.667,8:00,17:00,60
-20,Buton Palace Fortress,Baubau,Southeast Sulawesi,Warisan Kerajaan & Kolonial,-54.667,1.226.167,8:00,17:00,90
-21,Wae Rebo Village,Manggarai,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-87.680,1.202.838,24 hours,24 hours,720
-22,Kampung Bena,Ngada,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-88.833,1.210.833,8:00,17:00,90
-23,Banda Neira,Maluku Tengah,Maluku,Warisan Kerajaan & Kolonial,-45.333,1.299.000,8:00,17:00,120
-24,Baliem Valley Festival,Jayawijaya,Papua,Festival & Taman Budaya,-40.833,1.389.500,8:00,17:00,180
-25,Sasak Sade Village,Lombok Tengah,West Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-87.500,1.162.833,8:00,17:00,90
-26,Desa Penglipuran,Bangli,Bali,Desa Adat & Kehidupan Tradisional,-84.220,1.153.590,8:00,18:30,90
-27,Pura Uluwatu,Badung,Bali,Situs & Arsitektur Religi,-88.289,1.150.853,7:00,19:00,90
-28,Pura Besakih,Karangasem,Bali,Situs & Arsitektur Religi,-83.741,1.154.522,8:00,17:00,120
-29,Pura Ulun Danu Beratan,Tabanan,Bali,Situs & Arsitektur Religi,-82.706,1.151.666,7:00,19:00,60
-30,Pura Tirta Empul,Gianyar,Bali,Situs & Arsitektur Religi,-84.164,1.153.147,9:00,17:00,60
-31,Taman Mini Indonesia Indah,East Jakarta,DKI Jakarta,Festival & Taman Budaya,-63.017,1.068.967,8:00,16:00,180
-32,Monumen Nasional (Monas),Central Jakarta,DKI Jakarta,Museum & Monumen,-61.754,1.068.271,8:00,22:00,60
-33,Museum Fatahillah,West Jakarta,DKI Jakarta,Museum & Monumen,-61.349,1.068.133,9:00,15:00,60
-34,Masjid Istiqlal,Central Jakarta,DKI Jakarta,Situs & Arsitektur Religi,-61.697,1.068.308,4:00,22:00,45
-35,Gereja Katedral Jakarta,Central Jakarta,DKI Jakarta,Situs & Arsitektur Religi,-61.692,1.068.331,6:00,21:00,45
-36,Masjid Raya Baiturrahman,Banda Aceh,Aceh,Situs & Arsitektur Religi,5.5541,953.184,4:30,22:00,45
-37,Desa Bawomataluo,South Nias,North Sumatra,Desa Adat & Kehidupan Tradisional,6.170,977.870,8:00,18:00,90
-38,Istana Siak Sri Indrapura,Siak,Riau,Warisan Kerajaan & Kolonial,7.948,1.020.490,8:00,16:00,60
-39,Keraton Kasepuhan,Cirebon,West Java,Warisan Kerajaan & Kolonial,-67.263,1.085.709,8:00,17:00,60
-40,Situs Megalitikum Gunung Padang,Cianjur,West Java,Situs Sejarah & Arkeologi,-69.944,1.070.563,8:00,16:30,120
-41,Masjid Agung Demak,Demak,Central Java,Situs & Arsitektur Religi,-68.947,1.106.374,24 hours,24 hours,45
-42,Museum Ullen Sentalu,Sleman,DI Yogyakarta,Museum & Monumen,-75.980,1.104.232,8:30,16:00,60
-43,Situs Arkeologi Trowulan,Mojokerto,East Java,Situs Sejarah & Arkeologi,-75.419,1.123.909,8:00,15:30,120
-44,Kampung Warna Warni Jodipan,Malang,East Java,"Seni, Kerajinan & Pasar",-79.812,1.126.455,7:00,18:00,60
-45,Museum Angkut,Batu,East Java,Museum & Monumen,-78.791,1.125.199,12:00,20:00,120
-46,Desa Dayak Pampang,Samarinda,East Kalimantan,Desa Adat & Kehidupan Tradisional,-3.887,1.172.271,8:30,17:00,90
-47,Museum Mulawarman,Kutai Kartanegara,East Kalimantan,Museum & Monumen,-4.131,1.169.904,9:00,15:00,60
-48,Istana Kadriyah,Pontianak,West Kalimantan,Warisan Kerajaan & Kolonial,-288,1.093.498,10:00,17:00,45
-49,Desa Adat Ratenggaro,Sumba Barat Daya,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-96.644,1.192.933,24 hours,24 hours,90
-50,Kampung Prai Ijing,Sumba Barat,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-96.548,1.192.452,7:00,18:30,90
-51,Keraton Surakarta Hadiningrat,Surakarta,Central Java,Warisan Kerajaan & Kolonial,-75.756,1.108.288,9:00,14:00,60
-52,Saung Angklung Udjo,Bandung,West Java,"Seni, Kerajinan & Pasar",-68.988,1.076.534,10:00,17:00,120
-53,Lawang Sewu,Semarang,Central Java,Warisan Kerajaan & Kolonial,-69.829,1.104.140,8:00,20:00,60
-54,Candi Gedong Songo,Semarang (Kab.),Central Java,Situs Sejarah & Arkeologi,-72.132,1.103.411,7:00,17:00,120
-55,Benteng Vredeburg,Yogyakarta,DI Yogyakarta,Warisan Kerajaan & Kolonial,-78.000,1.103.661,7:30,16:00,60
-56,Kampung Adat Ciptagelar,Sukabumi,West Java,Desa Adat & Kehidupan Tradisional,-68.181,1.065.611,24 hours,24 hours,180
-57,Candi Sukuh,Karanganyar,Central Java,Situs Sejarah & Arkeologi,-76.253,1.111.299,8:00,16:00,60
-58,Pulau Penyengat,Tanjungpinang,Riau Islands,Warisan Kerajaan & Kolonial,9.234,1.044.239,8:00,17:00,120
-59,Museum Kata Andrea Hirata,Belitung Timur,Bangka Belitung,Museum & Monumen,-27.169,1.080.673,10:00,17:30,60
-60,Masjid Agung Palembang,Palembang,South Sumatra,Situs & Arsitektur Religi,-29.904,1.047.571,24 hours,24 hours,45
-61,Pasar Terapung Lok Baintan,Banjar,South Kalimantan,"Seni, Kerajinan & Pasar",-33.444,1.146.583,5:00,9:00,90
-62,Istana Alwatzikhoebillah,Sambas,West Kalimantan,Warisan Kerajaan & Kolonial,1.3571,1.093.032,8:00,17:00,60
-63,Museum La Galigo,Makassar,South Sulawesi,Museum & Monumen,-51.328,1.194.057,8:00,16:00,60
-64,Benteng Oranje,Ternate,North Maluku,Warisan Kerajaan & Kolonial,7.937,1.273.828,8:00,18:00,45
-65,Klenteng Ban Hin Kiong,Manado,North Sulawesi,Situs & Arsitektur Religi,1.4925,1.248.415,8:00,17:00,45
-66,Danau Sentani (Festival Site),Jayapura,Papua,Festival & Taman Budaya,-26.167,1.405.167,24 hours,24 hours,120
-67,Museum Siwalima,Ambon,Maluku,Museum & Monumen,-37.229,1.281.568,8:30,16:00,60
-68,Desa Tenganan Pegringsingan,Karangasem,Bali,Desa Adat & Kehidupan Tradisional,-84.729,1.155.606,8:00,18:00,90
-69,Pura Lingsar,Lombok Barat,West Nusa Tenggara,Situs & Arsitektur Religi,-85.447,1.161.966,8:00,18:00,60
-70,Istana Dalam Loka,Sumbawa Besar,West Nusa Tenggara,Warisan Kerajaan & Kolonial,-84.975,1.174.206,8:00,17:00,60
-71,Kampung Adat Wolotopo,Ende,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-88.050,1.217.311,8:00,17:00,90
-72,Museum Sonobudoyo,Yogyakarta,DI Yogyakarta,Museum & Monumen,-78.015,1.103.642,8:00,15:30,60
-73,Kompleks Candi Dieng,Banjarnegara,Central Java,Situs Sejarah & Arkeologi,-72.069,1.099.042,7:00,17:00,120
-74,Masjid Menara Kudus,Kudus,Central Java,Situs & Arsitektur Religi,-68.041,1.108.358,24 hours,24 hours,45
-75,Taman Narmada,Lombok Barat,West Nusa Tenggara,Warisan Kerajaan & Kolonial,-85.916,1.162.120,8:00,17:00,60
-76,Keraton Kanoman,Cirebon,West Java,Warisan Kerajaan & Kolonial,-67.265,1.085.670,8:00,16:00,45
-77,Museum Bank Indonesia,West Jakarta,DKI Jakarta,Museum & Monumen,-61.371,1.068.122,8:00,15:30,90
-78,Makam Raja-Raja Imogiri,Bantul,DI Yogyakarta,Warisan Kerajaan & Kolonial,-79.208,1.103.847,10:00,13:00,60
-79,Goa Gajah (Elephant Cave),Gianyar,Bali,Situs Sejarah & Arkeologi,-85.233,1.152.872,8:00,17:00,45
-80,Candi Ratu Boko,Sleman,DI Yogyakarta,Situs Sejarah & Arkeologi,-77.706,1.104.878,7:00,17:00,90
-81,Museum Wayang,West Jakarta,DKI Jakarta,Museum & Monumen,-61.347,1.068.126,9:00,15:00,60
-82,Museum Tekstil,West Jakarta,DKI Jakarta,Museum & Monumen,-61.953,1.068.121,9:00,15:00,60
-83,Pura Taman Ayun,Badung,Bali,Situs & Arsitektur Religi,-85.414,1.151.729,9:00,17:00,60
-84,Kampung Batik Laweyan,Surakarta,Central Java,"Seni, Kerajinan & Pasar",-75.701,1.108.037,9:00,17:00,90
-85,Kota Gede,Yogyakarta,DI Yogyakarta,"Seni, Kerajinan & Pasar",-78.229,1.103.888,9:00,17:00,90
-86,Museum Affandi,Sleman,DI Yogyakarta,Museum & Monumen,-77.816,1.103.951,9:00,16:00,60
-87,Museum Balaputradewa,Palembang,South Sumatra,Museum & Monumen,-29.463,1.047.214,8:00,15:30,60
-88,Istana Pagaruyung,Tanah Datar,West Sumatra,Warisan Kerajaan & Kolonial,-4.705,1.006.200,8:00,17:30,60
-89,Museum Tsunami Aceh,Banda Aceh,Aceh,Museum & Monumen,5.5492,953.168,9:00,16:00,90
-90,Vihara Tri Dharma Bumi Raya,Singkawang,West Kalimantan,Situs & Arsitektur Religi,9.080,1.089.839,8:00,17:00,45
-91,Taman Prasejarah Leang-Leang,Maros,South Sulawesi,Situs Sejarah & Arkeologi,-48.436,1.196.806,8:00,17:00,60
-92,Taman Mayura,Mataram,West Nusa Tenggara,Warisan Kerajaan & Kolonial,-85.866,1.161.360,8:00,17:00,45
-93,Museum Negeri NTT,Kupang,East Nusa Tenggara,Museum & Monumen,-101.581,1.236.191,8:00,15:00,60
-94,Benteng Victoria,Ambon,Maluku,Warisan Kerajaan & Kolonial,-36.925,1.281.803,8:00,17:00,45
-95,Gong Perdamaian Dunia,Ambon,Maluku,Museum & Monumen,-36.974,1.281.764,24 hours,24 hours,30
-96,Candi Mendut,Magelang,Central Java,Situs Sejarah & Arkeologi,-76.053,1.102.336,7:00,17:00,45
-97,Candi Plaosan (Lor & Kidul),Klaten,Central Java,Situs Sejarah & Arkeologi,-77.431,1.105.050,8:00,17:00,60
-98,Museum Kereta Api Ambarawa,Semarang (Kab.),Central Java,Museum & Monumen,-72.645,1.104.005,8:00,17:00,90
-99,Pasar Klewer,Surakarta,Central Java,"Seni, Kerajinan & Pasar",-75.755,1.108.266,8:00,17:00,60
-100,Museum Nasional Indonesia,Central Jakarta,DKI Jakarta,Museum & Monumen,-61.765,1.068.214,8:00,16:00,120
+1,Maimun Palace,Medan,North Sumatra,Warisan Kerajaan & Kolonial,3.5753,98.6839,8:00,17:00,45
+2,Muaro Jambi Temple Complex,Muaro Jambi,Jambi,Situs Sejarah & Arkeologi,-14.840,103.6170,8:00,17:00,90
+3,Rumah Gadang Village,Tanah Datar,West Sumatra,Desa Adat & Kehidupan Tradisional,-1.4814,101.0600,8:00,17:00,60
+4,Weh Island Cultural Village,Sabang,Aceh,Desa Adat & Kehidupan Tradisional,5.8897,95.3214,8:00,17:00,120
+5,Balige Traditional Market,Toba,North Sumatra,"Seni, Kerajinan & Pasar",2.3360,99.0790,7:00,17:00,60
+6,Borobudur Temple,Magelang,Central Java,Situs Sejarah & Arkeologi,-7.6079,110.2038,6:00,17:00,90
+7,Prambanan Temple,Sleman,DI Yogyakarta,Situs Sejarah & Arkeologi,-7.7522,110.4917,6:00,17:00,90
+8,Keraton Yogyakarta,Yogyakarta,DI Yogyakarta,Warisan Kerajaan & Kolonial,-7.8056,110.3647,8:30,14:00,60
+9,Trusmi Batik Village,Cirebon,West Java,"Seni, Kerajinan & Pasar",-6.7333,108.5667,8:00,17:00,60
+10,Naga Traditional Village,Tasikmalaya,West Java,Desa Adat & Kehidupan Tradisional,-7.3510,108.9560,8:00,17:00,60
+11,Banjar Traditional Village,South Kalimantan,South Kalimantan,Desa Adat & Kehidupan Tradisional,-3.3167,114.5900,8:00,17:00,60
+12,Dayak Longhouse,Kapuas Hulu,West Kalimantan,Desa Adat & Kehidupan Tradisional,-0.8333,112.9333,8:00,17:00,90
+13,Tanjung Puting Cultural Area,Kotawaringin Barat,Central Kalimantan,Desa Adat & Kehidupan Tradisional,-2.7333,111.6333,8:00,17:00,180
+14,Balanga Museum,Palangka Raya,Central Kalimantan,Museum & Monumen,-2.2100,113.9200,8:00,16:00,60
+15,Sintang Cultural Center,Sintang,West Kalimantan,Festival & Taman Budaya,-0.6670,111.5000,8:00,17:00,60
+16,Tana Toraja,Tana Toraja,South Sulawesi,Desa Adat & Kehidupan Tradisional,-3.0000,120.0000,8:00,17:00,180
+17,Fort Rotterdam,Makassar,South Sulawesi,Warisan Kerajaan & Kolonial,-5.1331,119.4064,8:00,17:00,60
+18,Wakatobi Cultural Village,Wakatobi,Southeast Sulawesi,Desa Adat & Kehidupan Tradisional,-5.3167,123.5833,8:00,17:00,120
+19,Gorontalo Traditional House,Gorontalo,Gorontalo,Desa Adat & Kehidupan Tradisional,5.333,123.0667,8:00,17:00,60
+20,Buton Palace Fortress,Baubau,Southeast Sulawesi,Warisan Kerajaan & Kolonial,-5.4667,122.6167,8:00,17:00,90
+21,Wae Rebo Village,Manggarai,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-8.7680,120.2838,24 hours,24 hours,720
+22,Kampung Bena,Ngada,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-8.8833,121.0833,8:00,17:00,90
+23,Banda Neira,Maluku Tengah,Maluku,Warisan Kerajaan & Kolonial,-4.5333,129.9000,8:00,17:00,120
+24,Baliem Valley Festival,Jayawijaya,Papua,Festival & Taman Budaya,-4.0833,138.9500,8:00,17:00,180
+25,Sasak Sade Village,Lombok Tengah,West Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-8.7500,116.2833,8:00,17:00,90
+26,Desa Penglipuran,Bangli,Bali,Desa Adat & Kehidupan Tradisional,-8.4220,115.3590,8:00,18:30,90
+27,Pura Uluwatu,Badung,Bali,Situs & Arsitektur Religi,-8.8289,115.0853,7:00,19:00,90
+28,Pura Besakih,Karangasem,Bali,Situs & Arsitektur Religi,-8.3741,115.4522,8:00,17:00,120
+29,Pura Ulun Danu Beratan,Tabanan,Bali,Situs & Arsitektur Religi,-8.2706,115.1666,7:00,19:00,60
+30,Pura Tirta Empul,Gianyar,Bali,Situs & Arsitektur Religi,-8.4164,115.3147,9:00,17:00,60
+31,Taman Mini Indonesia Indah,East Jakarta,DKI Jakarta,Festival & Taman Budaya,-6.3017,106.8967,8:00,16:00,180
+32,Monumen Nasional (Monas),Central Jakarta,DKI Jakarta,Museum & Monumen,-6.1754,106.8271,8:00,22:00,60
+33,Museum Fatahillah,West Jakarta,DKI Jakarta,Museum & Monumen,-6.1349,106.8133,9:00,15:00,60
+34,Masjid Istiqlal,Central Jakarta,DKI Jakarta,Situs & Arsitektur Religi,-6.1697,106.8308,4:00,22:00,45
+35,Gereja Katedral Jakarta,Central Jakarta,DKI Jakarta,Situs & Arsitektur Religi,-6.1692,106.8331,6:00,21:00,45
+36,Masjid Raya Baiturrahman,Banda Aceh,Aceh,Situs & Arsitektur Religi,5.5541,95.3184,4:30,22:00,45
+37,Desa Bawomataluo,South Nias,North Sumatra,Desa Adat & Kehidupan Tradisional,6.170,97.7870,8:00,18:00,90
+38,Istana Siak Sri Indrapura,Siak,Riau,Warisan Kerajaan & Kolonial,7.948,102.0490,8:00,16:00,60
+39,Keraton Kasepuhan,Cirebon,West Java,Warisan Kerajaan & Kolonial,-6.7263,108.5709,8:00,17:00,60
+40,Situs Megalitikum Gunung Padang,Cianjur,West Java,Situs Sejarah & Arkeologi,-6.9944,107.0563,8:00,16:30,120
+41,Masjid Agung Demak,Demak,Central Java,Situs & Arsitektur Religi,-6.8947,110.6374,24 hours,24 hours,45
+42,Museum Ullen Sentalu,Sleman,DI Yogyakarta,Museum & Monumen,-7.5980,110.4232,8:30,16:00,60
+43,Situs Arkeologi Trowulan,Mojokerto,East Java,Situs Sejarah & Arkeologi,-7.5419,112.3909,8:00,15:30,120
+44,Kampung Warna Warni Jodipan,Malang,East Java,"Seni, Kerajinan & Pasar",-7.9812,112.6455,7:00,18:00,60
+45,Museum Angkut,Batu,East Java,Museum & Monumen,-7.8791,112.5199,12:00,20:00,120
+46,Desa Dayak Pampang,Samarinda,East Kalimantan,Desa Adat & Kehidupan Tradisional,-3.887,117.2271,8:30,17:00,90
+47,Museum Mulawarman,Kutai Kartanegara,East Kalimantan,Museum & Monumen,-4.131,116.9904,9:00,15:00,60
+48,Istana Kadriyah,Pontianak,West Kalimantan,Warisan Kerajaan & Kolonial,-2.88,109.3498,10:00,17:00,45
+49,Desa Adat Ratenggaro,Sumba Barat Daya,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-9.6644,119.2933,24 hours,24 hours,90
+50,Kampung Prai Ijing,Sumba Barat,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-9.6548,119.2452,7:00,18:30,90
+51,Keraton Surakarta Hadiningrat,Surakarta,Central Java,Warisan Kerajaan & Kolonial,-7.5756,110.8288,9:00,14:00,60
+52,Saung Angklung Udjo,Bandung,West Java,"Seni, Kerajinan & Pasar",-6.8988,107.6534,10:00,17:00,120
+53,Lawang Sewu,Semarang,Central Java,Warisan Kerajaan & Kolonial,-6.9829,110.4140,8:00,20:00,60
+54,Candi Gedong Songo,Semarang (Kab.),Central Java,Situs Sejarah & Arkeologi,-7.2132,110.3411,7:00,17:00,120
+55,Benteng Vredeburg,Yogyakarta,DI Yogyakarta,Warisan Kerajaan & Kolonial,-7.8000,110.3661,7:30,16:00,60
+56,Kampung Adat Ciptagelar,Sukabumi,West Java,Desa Adat & Kehidupan Tradisional,-6.8181,106.5611,24 hours,24 hours,180
+57,Candi Sukuh,Karanganyar,Central Java,Situs Sejarah & Arkeologi,-7.6253,111.1299,8:00,16:00,60
+58,Pulau Penyengat,Tanjungpinang,Riau Islands,Warisan Kerajaan & Kolonial,-0.9234,104.4239,8:00,17:00,120
+59,Museum Kata Andrea Hirata,Belitung Timur,Bangka Belitung,Museum & Monumen,-2.7169,108.0673,10:00,17:30,60
+60,Masjid Agung Palembang,Palembang,South Sumatra,Situs & Arsitektur Religi,-2.9904,104.7571,24 hours,24 hours,45
+61,Pasar Terapung Lok Baintan,Banjar,South Kalimantan,"Seni, Kerajinan & Pasar",-3.3444,114.6583,5:00,9:00,90
+62,Istana Alwatzikhoebillah,Sambas,West Kalimantan,Warisan Kerajaan & Kolonial,-1.3571,109.3032,8:00,17:00,60
+63,Museum La Galigo,Makassar,South Sulawesi,Museum & Monumen,-5.1328,119.4057,8:00,16:00,60
+64,Benteng Oranje,Ternate,North Maluku,Warisan Kerajaan & Kolonial,0.7937,127.3828,8:00,18:00,45
+65,Klenteng Ban Hin Kiong,Manado,North Sulawesi,Situs & Arsitektur Religi,1.4925,124.8415,8:00,17:00,45
+66,Danau Sentani (Festival Site),Jayapura,Papua,Festival & Taman Budaya,-2.6167,140.5167,24 hours,24 hours,120
+67,Museum Siwalima,Ambon,Maluku,Museum & Monumen,-3.7229,128.1568,8:30,16:00,60
+68,Desa Tenganan Pegringsingan,Karangasem,Bali,Desa Adat & Kehidupan Tradisional,-8.4729,115.5606,8:00,18:00,90
+69,Pura Lingsar,Lombok Barat,West Nusa Tenggara,Situs & Arsitektur Religi,-8.5447,116.1966,8:00,18:00,60
+70,Istana Dalam Loka,Sumbawa Besar,West Nusa Tenggara,Warisan Kerajaan & Kolonial,-8.4975,117.4206,8:00,17:00,60
+71,Kampung Adat Wolotopo,Ende,East Nusa Tenggara,Desa Adat & Kehidupan Tradisional,-8.8050,121.7311,8:00,17:00,90
+72,Museum Sonobudoyo,Yogyakarta,DI Yogyakarta,Museum & Monumen,-7.8015,110.3642,8:00,15:30,60
+73,Kompleks Candi Dieng,Banjarnegara,Central Java,Situs Sejarah & Arkeologi,-7.2069,110.9042,7:00,17:00,120
+74,Masjid Menara Kudus,Kudus,Central Java,Situs & Arsitektur Religi,-6.8041,110.8358,24 hours,24 hours,45
+75,Taman Narmada,Lombok Barat,West Nusa Tenggara,Warisan Kerajaan & Kolonial,-8.5916,116.2120,8:00,17:00,60
+76,Keraton Kanoman,Cirebon,West Java,Warisan Kerajaan & Kolonial,-6.7265,108.5670,8:00,16:00,45
+77,Museum Bank Indonesia,West Jakarta,DKI Jakarta,Museum & Monumen,-6.1371,106.8122,8:00,15:30,90
+78,Makam Raja-Raja Imogiri,Bantul,DI Yogyakarta,Warisan Kerajaan & Kolonial,-7.9208,110.3847,10:00,13:00,60
+79,Goa Gajah (Elephant Cave),Gianyar,Bali,Situs Sejarah & Arkeologi,-8.5233,115.2872,8:00,17:00,45
+80,Candi Ratu Boko,Sleman,DI Yogyakarta,Situs Sejarah & Arkeologi,-7.7706,110.4878,7:00,17:00,90
+81,Museum Wayang,West Jakarta,DKI Jakarta,Museum & Monumen,-6.1347,106.8126,9:00,15:00,60
+82,Museum Tekstil,West Jakarta,DKI Jakarta,Museum & Monumen,-6.1953,106.8121,9:00,15:00,60
+83,Pura Taman Ayun,Badung,Bali,Situs & Arsitektur Religi,-8.5414,115.1729,9:00,17:00,60
+84,Kampung Batik Laweyan,Surakarta,Central Java,"Seni, Kerajinan & Pasar",-7.5701,110.8037,9:00,17:00,90
+85,Kota Gede,Yogyakarta,DI Yogyakarta,"Seni, Kerajinan & Pasar",-7.8229,110.3888,9:00,17:00,90
+86,Museum Affandi,Sleman,DI Yogyakarta,Museum & Monumen,-7.7816,110.3951,9:00,16:00,60
+87,Museum Balaputradewa,Palembang,South Sumatra,Museum & Monumen,-2.9463,104.7214,8:00,15:30,60
+88,Istana Pagaruyung,Tanah Datar,West Sumatra,Warisan Kerajaan & Kolonial,-4.705,100.6200,8:00,17:30,60
+89,Museum Tsunami Aceh,Banda Aceh,Aceh,Museum & Monumen,5.5492,95.3168,9:00,16:00,90
+90,Vihara Tri Dharma Bumi Raya,Singkawang,West Kalimantan,Situs & Arsitektur Religi,9.080,108.9839,8:00,17:00,45
+91,Taman Prasejarah Leang-Leang,Maros,South Sulawesi,Situs Sejarah & Arkeologi,-4.8436,119.6806,8:00,17:00,60
+92,Taman Mayura,Mataram,West Nusa Tenggara,Warisan Kerajaan & Kolonial,-8.5866,116.1360,8:00,17:00,45
+93,Museum Negeri NTT,Kupang,East Nusa Tenggara,Museum & Monumen,-10.1581,123.6191,8:00,15:00,60
+94,Benteng Victoria,Ambon,Maluku,Warisan Kerajaan & Kolonial,-3.6925,128.1803,8:00,17:00,45
+95,Gong Perdamaian Dunia,Ambon,Maluku,Museum & Monumen,-3.6974,128.1764,24 hours,24 hours,30
+96,Candi Mendut,Magelang,Central Java,Situs Sejarah & Arkeologi,-7.6053,110.2336,7:00,17:00,45
+97,Candi Plaosan (Lor & Kidul),Klaten,Central Java,Situs Sejarah & Arkeologi,-7.7431,110.5050,8:00,17:00,60
+98,Museum Kereta Api Ambarawa,Semarang (Kab.),Central Java,Museum & Monumen,-7.2645,110.4005,8:00,17:00,90
+99,Pasar Klewer,Surakarta,Central Java,"Seni, Kerajinan & Pasar",-7.5755,110.8266,8:00,17:00,60
+100,Museum Nasional Indonesia,Central Jakarta,DKI Jakarta,Museum & Monumen,-6.1765,106.8214,8:00,16:00,120

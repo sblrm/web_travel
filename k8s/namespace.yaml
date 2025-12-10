@@ -1,7 +1,13 @@
+# ==============================================================================
+# Namespace: Isolasi Resource Kubernetes
+# ==============================================================================
+# Namespace memisahkan resource aplikasi dari aplikasi lain di cluster yang sama
+# Seperti folder terpisah untuk setiap project
+
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: culturaltrip
+  name: culturaltrip  # Nama namespace untuk semua resource CulturalTrip
   labels:
     name: culturaltrip
     environment: production

@@ -1,25 +1,32 @@
-# Multi-stage build for optimized production image
-FROM php:8.2-fpm-alpine AS base
+# Image ini menggunakan PHP 8.2 FPM dengan Alpine Linux (lightweight)
 
-# Install system dependencies
+FROM php:8.2-fpm-alpine
+
+# Set working directory di dalam container
+WORKDIR /var/www/html
+
+# Install package yang dibutuhkan oleh Laravel dan PHP extensions
 RUN apk add --no-cache \
+    # Tools dasar
     git \
     curl \
-    libpng-dev \
-    libzip-dev \
     zip \
     unzip \
+    # Library untuk PHP extensions
+    libpng-dev \
+    libzip-dev \
     oniguruma-dev \
     icu-dev \
     freetype-dev \
     libjpeg-turbo-dev \
-    libwebp-dev \
+    # Database client
     mysql-client \
+    # Node.js untuk build frontend
     nodejs \
     npm
 
-# Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+# Extensions yang dibutuhkan Laravel
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
     pdo_mysql \
     mbstring \
@@ -30,79 +37,44 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     zip \
     intl
 
-# Install Redis extension
+# Install Redis extension (untuk caching)
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && apk del .build-deps
 
-# Install Composer
+# Composer adalah dependency manager untuk PHP
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy composer files
+# Copy file composer terlebih dahulu (untuk Docker layer caching)
 COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --prefer-dist
 
-# Install PHP dependencies (without dev dependencies for production)
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-
-# Copy package files
+# Copy file package.json untuk install Node dependencies
 COPY package.json package-lock.json ./
-
-# Install Node dependencies
 RUN npm ci
 
-# Copy application files
+# Copy semua file aplikasi ke dalam container
 COPY . .
 
-# Generate optimized autoloader
+# Generate autoloader yang sudah dioptimasi
 RUN composer dump-autoload --optimize
 
-# Build frontend assets
+# Build frontend assets (CSS, JS)
 RUN npm run build
 
-# Set permissions
+# Laravel perlu write permission untuk storage dan cache
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Copy entrypoint script
+# Script yang akan dijalankan saat container start
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+# Expose port 9000 untuk PHP-FPM
 EXPOSE 9000
 
+# Jalankan entrypoint script dan PHP-FPM
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["php-fpm"]
-
-# Development stage
-FROM base AS development
-
-# Install development dependencies
-RUN composer install --prefer-dist
-
-# Install Xdebug for development
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
-    && pecl install xdebug \
-    && docker-php-ext-enable xdebug \
-    && apk del .build-deps
-
-# Xdebug configuration
-RUN echo "xdebug.mode=develop,debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
-CMD ["php-fpm"]
-
-# Production stage
-FROM base AS production
-
-# Production PHP configuration
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
-# Note: Don't cache config here - will be done in entrypoint with K8s env vars
-# Assets already built in base stage
-
 CMD ["php-fpm"]

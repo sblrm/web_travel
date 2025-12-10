@@ -1,22 +1,29 @@
+# ==============================================================================
+# Docker Compose: Local Development Environment
+# ==============================================================================
+# File ini mendefinisikan semua service yang dibutuhkan untuk development
+# Run: docker compose up -d
+
 version: '3.8'
 
 services:
-  # Laravel Application
+  # Service 1: Laravel Application (PHP-FPM)
+  # Container utama yang menjalankan kode Laravel
   app:
     build:
       context: .
       dockerfile: Dockerfile
-      target: development
+      target: development  # Build stage untuk development (ada Xdebug)
     container_name: culturaltrip_app
-    restart: unless-stopped
+    restart: unless-stopped  # Auto-restart jika crash
     working_dir: /var/www/html
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html  # Mount project folder (hot reload)
       - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       - APP_ENV=${APP_ENV:-local}
       - APP_DEBUG=${APP_DEBUG:-true}
-      - DB_HOST=mysql
+      - DB_HOST=mysql  # Hostname = service name
       - DB_DATABASE=${DB_DATABASE:-culturaltrip}
       - DB_USERNAME=${DB_USERNAME:-culturaltrip}
       - DB_PASSWORD=${DB_PASSWORD:-secret}
@@ -25,7 +32,7 @@ services:
       - QUEUE_CONNECTION=database
       - CACHE_DRIVER=redis
       - SESSION_DRIVER=database
-    depends_on:
+    depends_on:  # Tunggu MySQL dan Redis ready dulu
       mysql:
         condition: service_healthy
       redis:
@@ -33,7 +40,8 @@ services:
     networks:
       - culturaltrip
 
-  # Queue Worker
+  # Service 2: Queue Worker
+  # Menjalankan background jobs (email, notifications, dll)
   queue:
     build:
       context: .

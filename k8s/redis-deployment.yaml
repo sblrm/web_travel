@@ -1,7 +1,14 @@
+# ==============================================================================
+# Redis: In-Memory Cache & Queue Backend
+# ==============================================================================
+# Redis dipakai untuk caching dan queue system (background jobs)
+# Mempercepat response time aplikasi
+
+# Service untuk Redis
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-service
+  name: redis-service  # Hostname untuk connect ke Redis
   namespace: culturaltrip
 spec:
   ports:
@@ -10,13 +17,14 @@ spec:
   selector:
     app: redis
 ---
+# Deployment untuk Redis (stateless)
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
   namespace: culturaltrip
 spec:
-  replicas: 1
+  replicas: 1  # Redis biasanya 1 instance untuk development
   selector:
     matchLabels:
       app: redis
@@ -27,7 +35,7 @@ spec:
     spec:
       containers:
         - name: redis
-          image: redis:7-alpine
+          image: redis:7-alpine  # Alpine = image kecil (~30MB)
           ports:
             - containerPort: 6379
           resources:

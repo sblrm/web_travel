@@ -1,16 +1,24 @@
+# ==============================================================================
+# MySQL Database: StatefulSet (Persistent Data)
+# ==============================================================================
+# StatefulSet dipakai untuk database karena perlu persistent storage
+# Beda dengan Deployment: StatefulSet menjaga identitas pod (nama & storage tetap)
+
+# Service untuk MySQL (headless service)
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: mysql-service  # Hostname yang dipakai aplikasi untuk connect
   namespace: culturaltrip
 spec:
   ports:
     - port: 3306
       targetPort: 3306
-  clusterIP: None
+  clusterIP: None  # Headless service (langsung ke pod, bukan load balancer)
   selector:
     app: mysql
 ---
+# StatefulSet: Untuk aplikasi yang butuh persistent identity
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -18,7 +26,7 @@ metadata:
   namespace: culturaltrip
 spec:
   serviceName: mysql-service
-  replicas: 1
+  replicas: 1  # Database biasanya 1 replica (master)
   selector:
     matchLabels:
       app: mysql
@@ -34,6 +42,7 @@ spec:
             - containerPort: 3306
               name: mysql
           env:
+            # Password dari Secret (encrypted)
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:

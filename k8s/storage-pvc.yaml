@@ -1,3 +1,10 @@
+# ==============================================================================
+# Persistent Volume Claim (PVC): Storage untuk File Upload
+# ==============================================================================
+# PVC = request untuk storage yang persistent (tidak hilang saat pod restart)
+# Dipakai untuk: uploaded images, logs, file cache, dll
+# Storage ini di-share ke semua pod aplikasi
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -5,11 +12,14 @@ metadata:
   namespace: culturaltrip
 spec:
   accessModes:
-    - ReadWriteMany  # Required for multiple pods
+    - ReadWriteMany  # Bisa diakses multiple pods secara bersamaan (penting!)
   resources:
     requests:
-      storage: 5Gi
-  # For cloud providers, specify storage class:
-  # storageClassName: standard  # GKE
-  # storageClassName: gp2        # AWS EKS
-  # storageClassName: managed-premium  # Azure AKS
+      storage: 5Gi  # Request 5GB storage
+  
+  # Storage Class: Tergantung cloud provider yang dipakai
+  # Uncomment sesuai platform deployment:
+  # storageClassName: standard           # Google Cloud (GKE)
+  # storageClassName: gp2                # AWS EKS
+  # storageClassName: managed-premium    # Azure AKS
+  # storageClassName: hostpath           # Local development (Docker Desktop)

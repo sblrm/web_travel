@@ -1,12 +1,19 @@
+# ==============================================================================
+# CI/CD Pipeline: Automated Testing
+# ==============================================================================
+# Pipeline ini otomatis jalan saat ada push atau pull request ke branch main
+# Tujuan: Memastikan kode yang masuk tidak merusak aplikasi
+
 name: Tests
 
+# Trigger: Kapan workflow ini jalan?
 on:
-  pull_request:
+  pull_request:  # Jalan saat ada pull request
     branches:
       - main
       - production
       - develop
-  push:
+  push:  # Jalan saat ada git push
     branches:
       - main
       - develop
@@ -14,13 +21,15 @@ on:
 jobs:
   tests:
     name: Run Tests (PHP ${{ matrix.php }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Jalan di server Ubuntu (gratis dari GitHub)
 
+    # Matrix Strategy: Test di multiple PHP versions
     strategy:
       matrix:
-        php: ['8.2', '8.3']
-      fail-fast: false
+        php: ['8.2', '8.3']  # Test di PHP 8.2 dan 8.3
+      fail-fast: false  # Tetap test semua version meskipun ada yang gagal
 
+    # Services: Database dan Cache untuk testing
     services:
       mysql:
         image: mysql:8.0
@@ -37,10 +46,13 @@ jobs:
           - 6379:6379
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
+    # Steps: Langkah-langkah yang dijalankan
     steps:
+      # Step 1: Download kode dari repository
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Install PHP dengan extensions yang dibutuhkan
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -48,15 +60,19 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: xdebug
 
+      # Step 3: Setup environment file
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+      # Step 4: Install PHP dependencies (Laravel packages)
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
+      # Step 5: Generate Laravel application key (untuk encryption)
       - name: Generate app key
         run: php artisan key:generate
 
+      # Step 6: Setup database connection
       - name: Configure database
         run: |
           php artisan config:clear
@@ -69,6 +85,7 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: password
 
+      # Step 7: Run database migrations (create tables)
       - name: Run database migrations
         run: php artisan migrate --force
         env:
@@ -79,15 +96,20 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: password
 
+      # Step 8: Install frontend dependencies (JavaScript packages)
       - name: Install NPM dependencies
         run: npm ci
 
+      # Step 9: Build frontend assets (compile CSS/JS)
       - name: Build assets
         run: npm run build
 
+      # Step 10: Check code formatting
       - name: Run Pint (Code Style Check)
         run: vendor/bin/pint --test
 
+      # Step 11: Run automated tests (PENTING!)
+      # Jika tests gagal, deployment tidak akan jalan
       - name: Run Pest Tests
         run: php artisan test
         env:
@@ -102,6 +124,8 @@ jobs:
           CACHE_DRIVER: redis
           SESSION_DRIVER: redis
 
+  # Job 2: Code Quality Checks
+  # Berjalan parallel dengan tests untuk mempercepat feedback
   code-quality:
     name: Code Quality Checks
     runs-on: ubuntu-latest
@@ -120,12 +144,15 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
+      # Check 1: Code formatting (Laravel Pint)
       - name: Run Pint
         run: vendor/bin/pint --test
 
+      # Check 2: Static analysis (PHPStan) - detect bugs tanpa run code
       - name: Run PHPStan Static Analysis
         run: vendor/bin/phpstan analyse --memory-limit=2G || true
 
+      # Check 3: Security vulnerability scan
       - name: Check for security vulnerabilities
         run: composer audit --no-dev || echo "⚠️ Security vulnerabilities found, please review"
         continue-on-error: true

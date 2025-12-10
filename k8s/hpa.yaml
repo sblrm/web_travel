@@ -1,30 +1,38 @@
-# Horizontal Pod Autoscaler - Auto-scaling based on CPU/Memory
+# ==============================================================================
+# Horizontal Pod Autoscaler (HPA): Auto-Scaling
+# ==============================================================================
+# Otomatis tambah/kurangi jumlah pod berdasarkan CPU/Memory usage
+# Traffic naik → Pod bertambah | Traffic turun → Pod berkurang
+# Benefit: Hemat cost & maintain performance
+
+# HPA untuk App Deployment
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: culturaltrip-app-hpa
   namespace: culturaltrip
 spec:
-  scaleTargetRef:
+  scaleTargetRef:  # Target yang mau di-scale
     apiVersion: apps/v1
     kind: Deployment
     name: culturaltrip-app
-  minReplicas: 3
-  maxReplicas: 10
-  metrics:
+  minReplicas: 3  # Minimum pod yang selalu jalan
+  maxReplicas: 10  # Maximum pod saat traffic tinggi
+  metrics:  # Trigger untuk scaling
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 70
+          averageUtilization: 70  # Scale up jika CPU > 70%
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 80
+          averageUtilization: 80  # Scale up jika Memory > 80%
 ---
+# HPA untuk Queue Worker
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

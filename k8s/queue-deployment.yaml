@@ -1,10 +1,16 @@
+# ==============================================================================
+# Queue Worker: Background Job Processor
+# ==============================================================================
+# Menjalankan background tasks (email, notifications, image processing, dll)
+# Berjalan terpisah dari web app untuk tidak memblokir HTTP request
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: culturaltrip-queue
   namespace: culturaltrip
 spec:
-  replicas: 2
+  replicas: 2  # 2 worker untuk handle job queue
   selector:
     matchLabels:
       app: culturaltrip-queue
@@ -16,17 +22,20 @@ spec:
       containers:
         - name: queue-worker
           image: docker.io/ragna13/culturaltrip:latest
+          # Command: Run Laravel queue worker
           command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+          # Load env vars dari ConfigMap dan Secret
           envFrom:
             - configMapRef:
                 name: culturaltrip-config
             - secretRef:
                 name: culturaltrip-secrets
+          # Resource limits (penting untuk prevent memory leak)
           resources:
-            requests:
+            requests:  # Minimum yang dibutuhkan
               memory: "128Mi"
               cpu: "100m"
-            limits:
+            limits:  # Maximum yang boleh dipakai
               memory: "256Mi"
               cpu: "200m"
           volumeMounts:

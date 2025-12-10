@@ -1,91 +1,115 @@
+# 🚀 CONTINUOUS DEPLOYMENT WORKFLOW
+# Workflow ini untuk deploy otomatis ke Kubernetes setelah build berhasil
+
 name: Deploy to Kubernetes
 
 on:
+  # TRIGGER: Kapan workflow ini berjalan?
   # Auto-deploy disabled - run manually only
   # push:
   #   branches:
   #     - main
   #     - production
-  workflow_dispatch:
+  workflow_dispatch:  # Bisa dijalankan manual dari GitHub Actions tab
 
 env:
-  DOCKER_REGISTRY: docker.io
-  DOCKER_IMAGE: ragna13/culturaltrip
-  K8S_NAMESPACE: culturaltrip
+  # KONFIGURASI: Informasi Docker Registry dan Kubernetes
+  DOCKER_REGISTRY: docker.io              # Docker Hub sebagai image registry
+  DOCKER_IMAGE: ragna13/culturaltrip      # Nama image yang akan di-push
+  K8S_NAMESPACE: culturaltrip             # Namespace Kubernetes untuk isolasi aplikasi
 
 jobs:
+  # ==========================================
+  # JOB 1: BUILD & PUSH IMAGE KE DOCKER HUB
+  # ==========================================
   build-and-push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     
     steps:
+      # Step 1: Download kode dari GitHub
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Setup Docker Buildx (untuk build multi-platform)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # Step 3: Login ke Docker Hub (butuh username & password di GitHub Secrets)
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # Step 4: Generate tags otomatis (latest, branch name, commit SHA)
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKER_IMAGE }}
           tags: |
-            type=sha,prefix={{branch}}-
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix={{branch}}-        # Tag: main-abc1234
+            type=ref,event=branch              # Tag: main
+            type=semver,pattern={{version}}    # Tag: v1.0.0 (jika ada)
+            type=raw,value=latest,enable={{is_default_branch}}  # Tag: latest
 
+      # Step 5: Build Docker image dan push ke Docker Hub
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
-          target: production
-          push: true
+          context: .                    # Build dari root project
+          file: ./Dockerfile            # Pakai Dockerfile yang sudah dibuat
+          target: production            # Pakai stage "production" di Dockerfile
+          push: true                    # Push image ke Docker Hub
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache
+          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache  # Pakai cache untuk build lebih cepat
           cache-to: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache,mode=max
 
+      # Step 6: Tampilkan image digest (hash unik untuk image)
       - name: Image digest
         run: echo ${{ steps.meta.outputs.digest }}
 
+  # ==========================================
+  # JOB 2: DEPLOY KE KUBERNETES CLUSTER
+  # ==========================================
   deploy-to-kubernetes:
     name: Deploy to Kubernetes
-    needs: build-and-push
+    needs: build-and-push  # Tunggu job 1 selesai dulu
     runs-on: ubuntu-latest
     
     steps:
+      # Step 1: Download kode (butuh file k8s/*.yaml)
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Install kubectl (command line tool untuk Kubernetes)
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: 'v1.28.0'
 
+      # Step 3: Konfigurasi kubectl untuk connect ke cluster (butuh KUBECONFIG di GitHub Secrets)
       - name: Configure kubectl
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
+      # Step 4: Test koneksi ke cluster
       - name: Verify cluster connection
         run: kubectl cluster-info
 
+      # Step 5: Buat namespace (seperti folder untuk semua resource kita)
       - name: Create namespace if not exists
         run: kubectl create namespace ${{ env.K8S_NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
 
+      # Step 6: Apply ConfigMap (konfigurasi non-sensitif: APP_ENV, APP_DEBUG, dll)
       - name: Apply ConfigMap
         run: kubectl apply -f k8s/configmap.yaml -n ${{ env.K8S_NAMESPACE }}
 
+      # Step 7: Apply Secrets (data sensitif: APP_KEY, DB_PASSWORD)
       - name: Apply Secrets
         run: |
           # Create secrets from GitHub Secrets
@@ -94,44 +118,57 @@ jobs:
             --from-literal=db-password="${{ secrets.DB_PASSWORD }}" \
             --dry-run=client -o yaml | kubectl apply -f - -n ${{ env.K8S_NAMESPACE }}
 
+      # Step 8: Deploy MySQL (database dengan persistent storage)
       - name: Deploy MySQL StatefulSet
         run: kubectl apply -f k8s/mysql-statefulset.yaml -n ${{ env.K8S_NAMESPACE }}
 
+      # Step 9: Deploy Redis (cache untuk session & queue)
       - name: Deploy Redis
         run: kubectl apply -f k8s/redis-deployment.yaml -n ${{ env.K8S_NAMESPACE }}
 
+      # Step 10: Tunggu MySQL siap (penting! aplikasi butuh database)
       - name: Wait for MySQL ready
         run: kubectl wait --for=condition=ready pod -l app=mysql -n ${{ env.K8S_NAMESPACE }} --timeout=300s
 
+      # Step 11: Deploy Aplikasi Laravel (web server + PHP)
       - name: Deploy Application
         run: kubectl apply -f k8s/app-deployment.yaml -n ${{ env.K8S_NAMESPACE }}
 
+      # Step 12: Deploy Queue Workers (untuk background jobs)
       - name: Deploy Queue Workers
         run: kubectl apply -f k8s/queue-deployment.yaml -n ${{ env.K8S_NAMESPACE }}
 
+      # Step 13: Deploy HPA (auto-scaling berdasarkan CPU usage)
       - name: Deploy HPA
         run: kubectl apply -f k8s/hpa.yaml -n ${{ env.K8S_NAMESPACE }}
 
+      # Step 14: Tunggu deployment selesai (rollout completed)
       - name: Wait for app deployment
         run: kubectl rollout status deployment/culturaltrip-app -n ${{ env.K8S_NAMESPACE }} --timeout=600s
 
+      # Step 15: Jalankan migrasi database (buat tabel, update schema)
       - name: Run database migrations
         run: |
           POD_NAME=$(kubectl get pods -n ${{ env.K8S_NAMESPACE }} -l app=culturaltrip-app -o jsonpath='{.items[0].metadata.name}')
           kubectl exec $POD_NAME -n ${{ env.K8S_NAMESPACE }} -c app -- php artisan migrate --force
 
+      # Step 16: Verifikasi deployment berhasil
       - name: Verify deployment
         run: |
           kubectl get pods -n ${{ env.K8S_NAMESPACE }}
           kubectl get svc -n ${{ env.K8S_NAMESPACE }}
 
+  # ==========================================
+  # JOB 3: NOTIFIKASI HASIL DEPLOYMENT
+  # ==========================================
   notify:
     name: Notify Deployment Status
-    needs: [build-and-push, deploy-to-kubernetes]
+    needs: [build-and-push, deploy-to-kubernetes]  # Tunggu kedua job selesai
     runs-on: ubuntu-latest
-    if: always()
+    if: always()  # Tetap jalan meskipun job sebelumnya gagal
     
     steps:
+      # Kirim notifikasi berhasil/gagal
       - name: Send notification
         run: |
           if [ "${{ needs.deploy-to-kubernetes.result }}" == "success" ]; then

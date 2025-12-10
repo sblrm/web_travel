@@ -1,32 +1,38 @@
-# Requires Ingress Controller (nginx-ingress, traefik, etc)
+# ==============================================================================
+# Ingress: Entry Point (Routing Traffic dari Internet)
+# ==============================================================================
+# Ingress = reverse proxy yang route traffic dari domain ke service di cluster
+# Seperti nginx reverse proxy, tapi managed by Kubernetes
+# Requires: Ingress Controller (nginx-ingress, traefik, dll) harus diinstall dulu
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: culturaltrip-ingress
   namespace: culturaltrip
   annotations:
-    # Nginx Ingress
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "256m"
+    # Nginx Ingress annotations
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Force HTTPS
+    nginx.ingress.kubernetes.io/proxy-body-size: "256m"  # Max upload size
     
-    # Cert-manager for Let's Encrypt
+    # Cert-manager: Auto-generate SSL certificate dari Let's Encrypt
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  ingressClassName: nginx
-  tls:
+  ingressClassName: nginx  # Pakai nginx ingress controller
+  tls:  # SSL/HTTPS configuration
     - hosts:
         - culturaltrip.com
         - www.culturaltrip.com
-      secretName: culturaltrip-tls
-  rules:
-    - host: culturaltrip.com
+      secretName: culturaltrip-tls  # Secret untuk store certificate
+  rules:  # Routing rules
+    - host: culturaltrip.com  # Domain yang di-handle
       http:
         paths:
-          - path: /
+          - path: /  # Semua path di root
             pathType: Prefix
             backend:
               service:
-                name: culturaltrip-service
+                name: culturaltrip-service  # Route ke service ini
                 port:
                   number: 80
     - host: www.culturaltrip.com

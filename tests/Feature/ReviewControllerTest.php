@@ -1,12 +1,11 @@
 <?php
 
 use App\Models\Destination;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Review;
 
 test('can store a new review', function () {
     $user = User::factory()->create();

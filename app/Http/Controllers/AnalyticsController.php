@@ -64,7 +64,7 @@ class AnalyticsController extends Controller
         // Top destinations by rating
         $topDestinations = Destination::withCount('verifiedReviews')
             ->withAvg('verifiedReviews as average_rating', 'rating')
-            ->having('verified_reviews_count', '>=', 3)
+            ->has('verifiedReviews', '>=', 3)
             ->orderByDesc('average_rating')
             ->limit(10)
             ->get();
@@ -73,7 +73,9 @@ class AnalyticsController extends Controller
         $topReviewers = User::withCount(['reviews' => function ($query) {
             $query->where('is_verified', true);
         }])
-            ->having('reviews_count', '>', 0)
+            ->whereHas('reviews', function ($query) {
+                $query->where('is_verified', true);
+            }, '>', 0)
             ->orderByDesc('reviews_count')
             ->limit(10)
             ->get();

@@ -17,7 +17,7 @@ class PaymentMethodFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company() . ' Bank',
+            'name' => fake()->company().' Bank',
             'type' => fake()->randomElement(['bank_transfer', 'e_wallet', 'cash']),
             'code' => fake()->unique()->lexify('????'),
             'account_number' => fake()->bankAccountNumber(),

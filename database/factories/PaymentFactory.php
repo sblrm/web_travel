@@ -22,7 +22,7 @@ class PaymentFactory extends Factory
         return [
             'booking_id' => Booking::factory(),
             'payment_method_id' => PaymentMethod::factory(),
-            'payment_code' => 'PAY-' . now()->format('Ymd') . '-' . strtoupper(Str::random(4)),
+            'payment_code' => 'PAY-'.now()->format('Ymd').'-'.strtoupper(Str::random(4)),
             'amount' => fake()->numberBetween(10000, 500000),
             'status' => 'pending',
         ];

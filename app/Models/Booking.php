@@ -213,6 +213,11 @@ class Booking extends Model
         return 'Rp '.number_format($this->unit_price, 0, ',', '.');
     }
 
+    public function getFormattedVisitDateAttribute(): string
+    {
+        return $this->visit_date ? $this->visit_date->format('d M Y') : '-';
+    }
+
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {

@@ -112,7 +112,7 @@ test('user can mark a notification as read and redirect to destination if destin
         'type' => 'App\Notifications\TestNotification',
         'data' => [
             'message' => 'Test Notification',
-            'destination_slug' => 'test-destination'
+            'destination_slug' => 'test-destination',
         ],
         'read_at' => null,
     ]);
@@ -163,7 +163,7 @@ test('user can mark all notifications as read', function () {
     $response = $this
         ->actingAs($user)
         ->from('/dashboard')
-        ->post("/notifications/mark-all-read");
+        ->post('/notifications/mark-all-read');
 
     $response->assertRedirect('/dashboard');
     $response->assertSessionHas('success', 'Semua notifikasi telah ditandai sebagai dibaca.');

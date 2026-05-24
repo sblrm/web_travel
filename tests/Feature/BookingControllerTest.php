@@ -4,7 +4,6 @@ use App\Models\Booking;
 use App\Models\Destination;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Str;
 
 test('authenticated user can cancel their own pending booking', function () {
     Event::fake();

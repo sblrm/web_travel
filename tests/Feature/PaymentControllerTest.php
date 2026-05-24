@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Booking;
-use App\Models\User;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
+use App\Models\User;
 
 test('authenticated user can view invoice for paid booking', function () {
     $user = User::factory()->create();

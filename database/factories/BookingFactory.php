@@ -11,7 +11,7 @@ class BookingFactory extends Factory
     public function definition(): array
     {
         return [
-            'booking_code' => 'BK-' . now()->format('Ymd') . '-' . strtoupper(fake()->lexify('????')),
+            'booking_code' => 'BK-'.now()->format('Ymd').'-'.strtoupper(fake()->lexify('????')),
             'user_id' => User::factory(),
             'destination_id' => Destination::factory(),
             'visit_date' => fake()->dateTimeBetween('+1 days', '+1 month'),

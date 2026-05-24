@@ -9,7 +9,7 @@ class PaymentMethodFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'Bank Transfer ' . fake()->company(),
+            'name' => 'Bank Transfer '.fake()->company(),
             'type' => 'bank_transfer',
             'code' => fake()->unique()->word(),
             'account_number' => fake()->numerify('##########'),

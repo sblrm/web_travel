@@ -13,7 +13,7 @@ class PaymentFactory extends Factory
         return [
             'booking_id' => Booking::factory(),
             'payment_method_id' => PaymentMethod::factory(),
-            'payment_code' => 'PAY-' . now()->format('Ymd') . '-' . strtoupper(fake()->lexify('????')),
+            'payment_code' => 'PAY-'.now()->format('Ymd').'-'.strtoupper(fake()->lexify('????')),
             'amount' => 50000,
             'status' => 'pending',
         ];

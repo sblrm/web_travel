@@ -3,22 +3,24 @@
 use App\Models\Destination;
 use App\Models\Review;
 use App\Models\User;
-use App\Notifications\ReviewApprovedNotification;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 test('authenticated user can mark all notifications as read', function () {
     $user = User::factory()->create();
 
-    // Create a destination and review to trigger a notification
+    // Create a destination
     $destination = Destination::factory()->create();
-    $review = Review::factory()->create([
-        'user_id' => $user->id,
-        'destination_id' => $destination->id,
-        'is_verified' => false,
-    ]);
 
-    // Send notification
-    $user->notify(new ReviewApprovedNotification($review));
+    // Create an unread notification directly
+    $user->notifications()->create([
+        'id' => Str::uuid()->toString(),
+        'type' => 'App\Notifications\ReviewApprovedNotification',
+        'data' => [
+            'destination_slug' => $destination->slug,
+            'message' => 'Review Anda disetujui',
+        ],
+        'read_at' => null,
+    ]);
 
     // Verify notification is unread
     $this->assertCount(1, $user->unreadNotifications);
@@ -44,16 +46,19 @@ test('unauthenticated user cannot mark notifications as read', function () {
 test('authenticated user can mark specific notification as read', function () {
     $user = User::factory()->create();
 
-    // Create a destination and review to trigger a notification
+    // Create a destination
     $destination = Destination::factory()->create();
-    $review = Review::factory()->create([
-        'user_id' => $user->id,
-        'destination_id' => $destination->id,
-        'is_verified' => false,
-    ]);
 
-    // Send notification
-    $user->notify(new ReviewApprovedNotification($review));
+    // Create an unread notification directly
+    $user->notifications()->create([
+        'id' => Str::uuid()->toString(),
+        'type' => 'App\Notifications\ReviewApprovedNotification',
+        'data' => [
+            'destination_slug' => $destination->slug,
+            'message' => 'Review Anda disetujui',
+        ],
+        'read_at' => null,
+    ]);
 
     // Verify notification is unread
     $this->assertCount(1, $user->unreadNotifications);

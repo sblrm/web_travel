@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Destination;
-use App\Models\Review;
 use App\Models\User;
 use Illuminate\Support\Str;
 

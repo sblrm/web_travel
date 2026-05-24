@@ -42,7 +42,7 @@ test('show displays the destination details and verified reviews', function () {
     });
 
     $response->assertViewHas('reviews', function ($reviews) use ($verifiedReview, $unverifiedReview) {
-        return $reviews->contains($verifiedReview) && !$reviews->contains($unverifiedReview);
+        return $reviews->contains($verifiedReview) && ! $reviews->contains($unverifiedReview);
     });
 
     $response->assertViewHas('relatedDestinations', function ($relatedDestinations) use ($relatedDestination) {
@@ -71,7 +71,7 @@ test('show filters reviews by rating when requested', function () {
 
     $response->assertStatus(200);
     $response->assertViewHas('reviews', function ($reviews) use ($fiveStarReview, $threeStarReview) {
-        return $reviews->contains($fiveStarReview) && !$reviews->contains($threeStarReview);
+        return $reviews->contains($fiveStarReview) && ! $reviews->contains($threeStarReview);
     });
 });
 

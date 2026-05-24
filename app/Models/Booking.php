@@ -203,6 +203,11 @@ class Booking extends Model
         $this->update(['status' => 'expired']);
     }
 
+    public function getFormattedVisitDateAttribute(): string
+    {
+        return $this->visit_date ? $this->visit_date->format('d M Y') : '-';
+    }
+
     public function getFormattedTotalAmountAttribute(): string
     {
         return 'Rp '.number_format($this->total_amount, 0, ',', '.');

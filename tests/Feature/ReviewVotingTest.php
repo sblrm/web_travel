@@ -139,7 +139,7 @@ test('vote requires is_helpful parameter', function () {
 test('vote requires is_helpful to be boolean', function () {
     $this->actingAs($this->voter)
         ->post(route('reviews.vote', $this->review), [
-            'is_helpful' => 'not-a-boolean'
+            'is_helpful' => 'not-a-boolean',
         ])
         ->assertSessionHasErrors('is_helpful');
 

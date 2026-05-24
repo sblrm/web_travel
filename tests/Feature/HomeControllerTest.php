@@ -90,7 +90,7 @@ it('fetches featured destinations correctly', function () {
         // We know only active destinations are returned by checking the count.
         // Also verify the models are loaded with province and category
         $first = $destinations->first();
-        if (!$first->relationLoaded('province') || !$first->relationLoaded('category')) {
+        if (! $first->relationLoaded('province') || ! $first->relationLoaded('category')) {
             return false;
         }
 

@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\User;
-use App\Models\Destination;
 use App\Models\Booking;
+use App\Models\Destination;
 use App\Models\PaymentMethod;
+use App\Models\User;
 
 beforeEach(function () {
     $this->user = User::factory()->create();

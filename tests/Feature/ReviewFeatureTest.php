@@ -108,3 +108,80 @@ test('destination show page displays rating breakdown', function () {
     $response->assertSee('4⭐');
     $response->assertSee('5⭐');
 });
+
+test('user can delete their own review', function () {
+    $user = User::factory()->create();
+    $destination = Destination::factory()->create();
+    $review = Review::create([
+        'user_id' => $user->id,
+        'destination_id' => $destination->id,
+        'rating' => 3,
+        'comment' => 'Review to be deleted',
+        'is_verified' => true,
+    ]);
+
+    $this->actingAs($user)
+        ->delete(route('reviews.destroy', $review))
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    $this->assertDatabaseMissing('reviews', [
+        'id' => $review->id,
+    ]);
+});
+
+test('user cannot delete other users review', function () {
+    $user1 = User::factory()->create();
+    $user2 = User::factory()->create();
+    $destination = Destination::factory()->create();
+    $review = Review::create([
+        'user_id' => $user1->id,
+        'destination_id' => $destination->id,
+        'rating' => 3,
+        'comment' => 'Review to keep',
+        'is_verified' => true,
+    ]);
+
+    $this->actingAs($user2)
+        ->delete(route('reviews.destroy', $review))
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('reviews', [
+        'id' => $review->id,
+    ]);
+});
+
+test('deleting a review also deletes its associated images', function () {
+    Storage::fake('public');
+
+    $user = User::factory()->create();
+    $destination = Destination::factory()->create();
+
+    // Simulate uploading an image
+    $file = \Illuminate\Http\UploadedFile::fake()->image('review1.jpg');
+    $path = $file->store('reviews', 'public');
+
+    $review = Review::create([
+        'user_id' => $user->id,
+        'destination_id' => $destination->id,
+        'rating' => 5,
+        'comment' => 'Great place',
+        'is_verified' => true,
+        'images' => [$path],
+    ]);
+
+    // Assert the image exists before deletion
+    Storage::disk('public')->assertExists($path);
+
+    $this->actingAs($user)
+        ->delete(route('reviews.destroy', $review))
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    $this->assertDatabaseMissing('reviews', [
+        'id' => $review->id,
+    ]);
+
+    // Assert the image is deleted from storage
+    Storage::disk('public')->assertMissing($path);
+});

@@ -31,6 +31,88 @@ test('user can edit their own review', function () {
     ]);
 });
 
+test('review update validates rating and comment inputs', function () {
+    $user = User::factory()->create();
+    $destination = Destination::factory()->create();
+    $review = Review::create([
+        'user_id' => $user->id,
+        'destination_id' => $destination->id,
+        'rating' => 3,
+        'comment' => 'Original comment',
+    ]);
+
+    $this->actingAs($user);
+
+    // Test missing rating
+    $this->patch(route('reviews.update', $review), [
+        'comment' => 'Updated comment',
+    ])->assertSessionHasErrors('rating');
+
+    // Test invalid rating bounds (min)
+    $this->patch(route('reviews.update', $review), [
+        'rating' => 0,
+    ])->assertSessionHasErrors('rating');
+
+    // Test invalid rating bounds (max)
+    $this->patch(route('reviews.update', $review), [
+        'rating' => 6,
+    ])->assertSessionHasErrors('rating');
+
+    // Test invalid rating type
+    $this->patch(route('reviews.update', $review), [
+        'rating' => 'five',
+    ])->assertSessionHasErrors('rating');
+
+    // Test comment too short
+    $this->patch(route('reviews.update', $review), [
+        'rating' => 5,
+        'comment' => 'short', // less than 10 characters
+    ])->assertSessionHasErrors('comment');
+
+    // Test comment too long
+    $this->patch(route('reviews.update', $review), [
+        'rating' => 5,
+        'comment' => str_repeat('a', 1001), // more than 1000 characters
+    ])->assertSessionHasErrors('comment');
+});
+
+test('review update replaces old images and uploads new images', function () {
+    Storage::fake('public');
+
+    $user = User::factory()->create();
+    $destination = Destination::factory()->create();
+    $oldImage = Illuminate\Http\UploadedFile::fake()->image('old.jpg');
+    $oldImagePath = $oldImage->store('reviews', 'public');
+
+    $review = Review::create([
+        'user_id' => $user->id,
+        'destination_id' => $destination->id,
+        'rating' => 3,
+        'images' => [$oldImagePath],
+    ]);
+
+    Storage::disk('public')->assertExists($oldImagePath);
+
+    $newImage = Illuminate\Http\UploadedFile::fake()->image('new.jpg');
+
+    $this->actingAs($user)
+        ->patch(route('reviews.update', $review), [
+            'rating' => 5,
+            'images' => [$newImage],
+        ])
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    $review->refresh();
+
+    // Verify old image was deleted
+    Storage::disk('public')->assertMissing($oldImagePath);
+
+    // Verify new image was uploaded and stored in DB
+    expect($review->images)->toHaveCount(1);
+    Storage::disk('public')->assertExists($review->images[0]);
+});
+
 test('user cannot edit other users review', function () {
     $user1 = User::factory()->create();
     $user2 = User::factory()->create();

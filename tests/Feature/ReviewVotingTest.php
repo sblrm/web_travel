@@ -124,3 +124,27 @@ test('guest cannot vote on review', function () {
         'review_id' => $this->review->id,
     ]);
 });
+
+test('vote requires is_helpful parameter', function () {
+    $this->actingAs($this->voter)
+        ->post(route('reviews.vote', $this->review), [])
+        ->assertSessionHasErrors('is_helpful');
+
+    $this->assertDatabaseMissing('review_votes', [
+        'review_id' => $this->review->id,
+        'user_id' => $this->voter->id,
+    ]);
+});
+
+test('vote requires is_helpful to be boolean', function () {
+    $this->actingAs($this->voter)
+        ->post(route('reviews.vote', $this->review), [
+            'is_helpful' => 'not-a-boolean',
+        ])
+        ->assertSessionHasErrors('is_helpful');
+
+    $this->assertDatabaseMissing('review_votes', [
+        'review_id' => $this->review->id,
+        'user_id' => $this->voter->id,
+    ]);
+});

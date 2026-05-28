@@ -83,3 +83,18 @@ test('correct password must be provided to delete account', function () {
 
     $this->assertNotNull($user->fresh());
 });
+
+test('password must be provided to delete account', function () {
+    $user = User::factory()->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->from('/profile')
+        ->delete('/profile', []);
+
+    $response
+        ->assertSessionHasErrorsIn('userDeletion', 'password')
+        ->assertRedirect('/profile');
+
+    $this->assertNotNull($user->fresh());
+});

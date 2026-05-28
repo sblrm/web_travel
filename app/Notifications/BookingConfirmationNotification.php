@@ -39,7 +39,7 @@ class BookingConfirmationNotification extends Notification implements ShouldQueu
             ->greeting('Halo '.$this->booking->visitor_name.'!')
             ->line('Terima kasih telah melakukan booking di '.$this->booking->destination->name.'.')
             ->line('Kode Booking: **'.$this->booking->booking_code.'**')
-            ->line('Tanggal Kunjungan: '.$this->booking->getFormattedVisitDateAttribute())
+            ->line('Tanggal Kunjungan: '.$this->booking->visit_date->format('d F Y'))
             ->line('Jumlah Pengunjung: '.$this->booking->quantity.' orang')
             ->line('Total Pembayaran: **'.$this->booking->getFormattedTotalAmountAttribute().'**')
             ->line('Silakan lakukan pembayaran dalam 24 jam.')
